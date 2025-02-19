@@ -1,0 +1,78 @@
+express:
+	what is express ?
+
+	express is a node_js frame work.
+
+purpose:
+	to manipulate runtime/dynamic values from html forms.
+
+	express is a backend runtime environment
+
+installation:
+	>npm install express.
+
+two methods:
+	get method --> it will shows form input values in url
+	post method --> do not show form input values in url
+	(body-parser)
+
+header file import:
+var express=require("express")# here express is a functoin
+var app=express()
+or
+var app=require("express")()
+
+app.get('functionname',(req,res)=>{
+
+	req.query["name1"]
+	res.send("")	
+
+}).listen("port")
+
+app.post('functionname',urlencoder,(req,res)=>{
+
+	req.body.un
+	req.body.pw
+	res.send("")
+).listen("port number")
+
+exp program:
+var express=require("express")
+var app=express()
+
+app.get("/mfun",(req,res)=>{
+
+var user=req.query["un"]
+var pass=req.query["pw"]
+res.send(user+"  "+pass)
+
+}).listen(1235)
+
+console.log("port listening at 1235.........")
+
+html pgm:
+=========
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://127.0.0.1:1235/mfun">
+        <input type="text" name="un"><br>
+        <input type="password" name="pw"><br>
+        <input type="submit" value="go express">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
