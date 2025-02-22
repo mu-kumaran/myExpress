@@ -1,0 +1,76 @@
+body-parser:
+============
+hiding form input values in Address bar.
+
+use:
+it is high security .(do not show password or any form input value in URL)
+
+
+installation:
+=============
+d:/projectfolder>npm install body-parser
+
+module import:
+==============
+var bp=require("body-parser")
+
+declaration:
+============
+
+var urlencodeparser=bp.urlencoded({extended:false})
+
+how to use function in post method(body parser)?
+================================================
+note: apply 3 parameters or arguments
+1.userdefined functionname
+2.urlencodeparser
+3.arrow function
+
+app.post("/funname",urlencodeparser,(req,res)=>{
+
+var data1=req.body.t1
+var data2=req.body.t2
+//output in browser
+res.send("browser print"+data1...)
+}).listen(portno)
+
+note:
+here t1,t2 -->html form input names
+don't forget to add method="post" form attributes in html file
+
+
+html file:
+--------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://127.0.0.1:9875/postfun" method="post">
+
+
+        <input type="text" name="un"><br>
+        <input type="password" name="pw"><br>
+        <input type="submit" value="go express">
+    </form>
+</body>
+</html>
+
+.js file
+-------------------------------
+//var exp=require("express")
+//var app=exp()
+var app=require("express")()
+var bodyParser=require("body-parser")
+var urlEncoder=bodyParser.urlencoded({extended:false})
+
+app.post("/postfun",urlEncoder,(req,res)=>{
+    var un=req.body.un
+    var pw=req.body.pw
+    res.send("user Name:"+un+"<br>password:"+pw)
+
+}).listen(9875)
+console.log("port listending at 9875 .......")
