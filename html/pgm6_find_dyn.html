@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        function dis()
+        {
+            var res1=document.getElementById("s1").checked;
+            var res2=document.getElementById("s2").checked;
+            if(res1===true)
+        {
+            //alert("serar1");
+            //document.getElementById("t1").placeholder="type rno";
+            document.getElementById("t1").style.display="block";
+            document.getElementById("t2").style.display="none";
+        }
+        if(res2===true)
+        {
+            //alert("serar2");
+           //document.getElementById("t1").placeholder="type name";
+           document.getElementById("t2").style.display="block";
+           document.getElementById("t1").style.display="none";
+        }           
+
+        }
+        function defaulthide()
+        {
+            document.getElementById("t1").style.display="none";
+            document.getElementById("t2").style.display="none";
+        }
+    </script>
+</head>
+<body onload="defaulthide()">
+    <form action="http://127.0.0.1:9993/searchfun">
+        <input type="radio" id="s1" name="ser" onchange="dis()">By rno
+        <input type="radio" id="s2" name="ser" onchange="dis()">By name
+
+        <input type="text" placeholder="Enter rno" id="t1" name="rno">
+        <input type="text" placeholder="Enter name" id="t2" name="name">
+        <br>
+        <input type="submit" value="search">
+    </form>
+</body>
+</html>

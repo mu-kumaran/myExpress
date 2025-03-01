@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        function myfun()
+        {
+            var socket=io();
+            var email=document.getElementById("e1").value;
+            var msg=document.getElementById("m1").value;
+            socket.emit("manojevent",{
+                semail:email,
+                smsg:msg
+            })
+        }
+    </script>
+</head>
+<body>
+    <input type="email" placeholder="Enter email:" id="e1"><br>
+    <input type="text" placeholder="Enter message:" id="m1"><br>
+    <input type="button" onclick="myfun()" value="send msg to server">
+</body>
+</html>
+
+
+const app=require("express")()
+const socketio=require("socket.io")
+const http=require("http")
+
+const port=process.env.PORT||3500
+
+const server=http.createServer(app)
+var io=socketio(server)
+
+// called function
+io.on("connection",(socket)=>{
+
+        socket.on("manojevent",(msg)=>{
+            console.log("New message from client:",msg)
+        })
+})
+
+app.get("/",(req,res)=>{
+    res.sendFile("D:/student/kiruthika/expgit/manoj_exp/html/client.html")
+})
+
+server.listen(port)
+console.log("port listening at 3500...........")

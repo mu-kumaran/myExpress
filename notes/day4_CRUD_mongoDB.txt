@@ -70,7 +70,8 @@ console.log("port listening at 9992.......")
 
 
 // Find static one(findOne) or many(find)
-//dynamic task21
+-----------------------------------------------
+
 var {MongoClient} = require("mongodb")
 const client=new MongoClient("mongodb://127.0.0.1:27017/")
 client.connect()
@@ -80,3 +81,286 @@ try
 const dataset=client.db("student").collection("details").find({mark:{$gt:60}}).toArray()
 dataset.then((cres)=>{
 console.log(cres)
+
+
+//Find - dynamic
+---------------------------
+var app=require("express")()
+app.get("/searchfun",(req,bres)=>{
+    var rno1=req.query["rno"]
+    var name1=req.query["name"]    
+    if (rno1.length>0)
+    {
+    var input={
+        rno:parseInt(rno1)        
+    }
+    }
+    else
+    {
+        var input={
+            sname:name1
+        }
+    }
+    
+    
+    var {MongoClient} = require("mongodb")
+    const client=new MongoClient("mongodb://127.0.0.1:27017/")
+    client.connect()
+    console.log("connection success")
+    try
+    {
+    const dataset=client.db("student").collection("details").find(input).toArray()
+    dataset.then((cres)=>{
+    console.log(cres)
+    bres.send(cres)
+   
+    })
+}
+catch
+{
+    console.log("error")
+    client.close()
+}
+}).listen(9993)
+console.log("port listening 9993........")
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        function dis()
+        {
+            var res1=document.getElementById("s1").checked;
+            var res2=document.getElementById("s2").checked;
+            if(res1===true)
+        {
+            //alert("serar1");
+            //document.getElementById("t1").placeholder="type rno";
+            document.getElementById("t1").style.display="block";
+            document.getElementById("t2").style.display="none";
+        }
+        if(res2===true)
+        {
+            //alert("serar2");
+           //document.getElementById("t1").placeholder="type name";
+           document.getElementById("t2").style.display="block";
+           document.getElementById("t1").style.display="none";
+        }           
+
+        }
+        function defaulthide()
+        {
+            document.getElementById("t1").style.display="none";
+            document.getElementById("t2").style.display="none";
+        }
+    </script>
+</head>
+<body onload="defaulthide()">
+    <form action="http://127.0.0.1:9993/searchfun">
+        <input type="radio" id="s1" name="ser" onchange="dis()">By rno
+        <input type="radio" id="s2" name="ser" onchange="dis()">By name
+
+        <input type="text" placeholder="Enter rno" id="t1" name="rno">
+        <input type="text" placeholder="Enter name" id="t2" name="name">
+        <br>
+        <input type="submit" value="search">
+    </form>
+</body>
+</html>
+
+// update - dynamic
+
+var app=require("express")()
+app.get("/updatefun",(req,bres)=>{
+    var rno1=req.query["rno"]
+    var name1=req.query["name"]    
+    var mark1=req.query["mark"]    
+    var olddata={
+        rno:parseInt(rno1)
+    }
+    var newdata={
+        name:name1,
+        mark:parseFloat(mark1)
+    }
+    
+    var {MongoClient} = require("mongodb")
+    const client=new MongoClient("mongodb://127.0.0.1:27017/")
+    client.connect()
+    console.log("connection success")
+    try
+    {
+    const dataset=client.db("student").collection("details").updateOne(olddata,{$set:newdata})
+    dataset.then((cres)=>{
+    console.log(cres)
+    if(cres.matchedCount===0)
+        {
+            bres.send("<h1>Record Not Found</h1>")
+        }
+    if(cres.modifiedCount>0)
+        {
+          bres.send("<h1>Record Updated success</h1>")
+        }
+    
+    bres.send(cres)
+   
+    })
+}
+catch
+{
+    console.log("error")
+    client.close()
+}
+}).listen(9994)
+console.log("port listening 9994........")
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:9994/updatefun">
+        <input type="text" placeholder="rno" name="rno"><br>
+        <input type="text" placeholder="name" name="name"><br>
+        <input type="text" placeholder="mark" name="mark"><br>
+        <input type="submit" value="update">
+
+    </form>    
+</body>
+</html>
+
+// Find - dynamic - task - with 3 radio buttons 
+var exp = require("express")
+var app = exp()
+
+//mongodb connection
+ var {MongoClient} = require("mongodb")
+ var client = new MongoClient("mongodb://127.0.0.1:27017/")
+ client.connect()
+ console.log("connection successful")
+
+// find operation
+
+app.get("/findstud",(req,res)=>{
+    var s1 = req.query["roll"]
+    var s2 = req.query["sname"]
+    var s3 = req.query["mark"]
+    console.log(s1)
+    console.log(s2)
+    console.log(s3)
+    console.log(s1.length)
+    console.log(s2.length)
+    console.log(s3.length)
+    
+    if(s1.length>0){
+        var input = {
+            rollno:parseInt(s1)
+        }
+    }
+    else if(s2.length>0){
+        var input = {
+            sname:s2
+        }
+    }
+    else{
+        var input = {
+            mark:parseInt(s3)
+        }
+    }
+    console.log(input)
+    var dataset = client.db("manoj").collection("student").find(input).toArray()
+    try{
+        dataset.then((result)=>{
+            console.log(result)
+            console.log(result.length)
+            if (result.length>0){
+                res.send(result)
+            }
+            else{
+                res.send("Record not found")
+            }
+        })
+    }
+    catch{
+        console.log("Error")
+        client.close()
+    }
+    
+}).listen(1234)
+console.log("port listening at 1234....")
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        #s1,#s2,#s3
+        {
+            display: none;
+        }
+    </style>
+
+<script type="text/javascript">
+    function dis(){
+        var rno = document.getElementById("roll").checked;
+        var rname = document.getElementById("sname").checked;
+        var rmark = document.getElementById("mark").checked;
+
+        if(rno){
+            
+            document.getElementById("s1").style.display = "block";
+            document.getElementById("s2").style.display = "none";
+            document.getElementById("s3").style.display = "none";
+        }
+        if(rname){
+          
+            document.getElementById("s2").style.display = "block";
+            document.getElementById("s1").style.display = "none";
+            document.getElementById("s3").style.display = "none";
+        }
+        if(rmark){
+            
+            document.getElementById("s3").style.display = "block";
+            document.getElementById("s1").style.display = "none";
+            document.getElementById("s2").style.display = "none";
+        }
+        
+    }
+
+</script>
+    
+</head>
+<body>
+    <h1><u>Find student profile</u></h1>
+    <h3>Search by,</h3>
+    <form action="http://127.0.0.1:1234/findstud" method="get">
+    <input type="radio" id="roll" onclick="dis()" name="stud">Roll no
+    <input type="radio" id="sname" onclick="dis()" name="stud">Student name
+    <input type="radio" id="mark" onclick="dis()" name="stud">Mark
+    <br><br>
+    <div id="s1">
+        Roll no:<input type="text" name="roll" placeholder="Enter student roll no">
+    </div>
+    <div id="s2">
+        Student name:<input type="text" name="sname" placeholder="Enter student name">
+    </div>
+    <div id="s3">
+        Mark:<input type="text" name="mark" placeholder="Enter student mark">
+    </div><br>
+    <input type="submit" value="Find">
+    <input type="reset" value="Reset">
+    </form>
+</body>
+</html>
